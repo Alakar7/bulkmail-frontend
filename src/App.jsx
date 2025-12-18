@@ -35,23 +35,33 @@ function App() {
   reader.readAsBinaryString(file);
   }
 
-  function send()
-  {
-    setstatus(true)
-    axios.post("http://localhost:5000/sendemail",{msg:msg,emailList:emailList})
-    .then(function(data)
-    {
-      if(data.data === true)
-      {
-        alert("Email Sent Successfully")
-        setstatus(false)
-      }
-      else{
-        alert("Failed")
-        setstatus(false)
-      }
-    })
+function send() {
+  if (emailList.length === 0) {
+    alert("Please upload email file");
+    return;
   }
+
+  setstatus(true);
+
+  axios
+    .post("https://bulkmail-backend-zv47.onrender.com", {
+      msg,
+      emailList
+    })
+    .then((res) => {
+      if (res.data.success === true || res.data === true) {
+        alert("Email Sent Successfully");
+      } else {
+        alert("Failed to send email");
+      }
+      setstatus(false);
+    })
+    .catch(() => {
+      alert("Server error");
+      setstatus(false);
+    });
+}
+
 
   return (
    
